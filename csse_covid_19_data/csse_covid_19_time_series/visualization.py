@@ -35,10 +35,11 @@ population = {
     "US": 329470935,
     "Japan": 126010000,
     "Netherlands": 17445781,
+    "Denmark": 5800000,
 }
 
 ax = plt.gca()
-i = ["Italy", "Germany", "Switzerland", "Spain", "US", "Japan", "Netherlands"]
+i = ["Italy", "Germany", "Switzerland", "Spain", "US", "Japan", "Netherlands", "Denmark"]
 for c in i:
     data = extract_line(c)
     data /= (population[c] / 1e6)
