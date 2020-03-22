@@ -33,7 +33,8 @@ ui <- fluidPage(
                                "Cases",
                                choices = list("Confirmed" = "confirmed",
                                               "Deaths" = "deaths",
-                                              "Recovered" = "recovered"),
+                                              "Recovered" = "recovered",
+                                              "Fatality" = "fatality"),
                                selected = "confirmed")
         ),
 
@@ -47,17 +48,19 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
     data <- reactive({
-        df <- long_data %>%
+        long_data %>%
             filter(Country.Region %in% input$countries) %>%
-            filter(case %in% input$cases) %>%
+            select(c("Country.Region", "date", "population"), input$cases) %>%
+            pivot_longer(
+                c(-Country.Region, -date, -population),
+                names_to="case",
+                values_to="value") %>%
             mutate(value = ifelse(rep(input$by_population, nrow(.)), value / population, value))
     })
     
 
     output$linePlot <- renderPlot({
-        plot_data <- data()
-        
-        p <- plot_data %>%
+        p <- data() %>%
             ggplot(aes(x = date, y = value, color = Country.Region, linetype = case)) +
             geom_line(size = 1.1) +
             theme_pubr()
