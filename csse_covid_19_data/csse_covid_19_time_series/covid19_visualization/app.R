@@ -40,7 +40,12 @@ ui <- fluidPage(
 
         # Show a plot of the generated distribution
         mainPanel(
-           plotOutput("linePlot")
+           plotOutput("linePlot"),
+           sliderInput("date_range",
+                       "Date Range",
+                       min = min(long_data$date), max = max(long_data$date),
+                       value = c(min(long_data$date), max(long_data$date)),
+                       width = "100%")
         )
     )
 )
@@ -53,9 +58,10 @@ server <- function(input, output) {
             select(c("Country.Region", "date", "population"), input$cases) %>%
             pivot_longer(
                 c(-Country.Region, -date, -population),
-                names_to="case",
-                values_to="value") %>%
-            mutate(value = ifelse(rep(input$by_population, nrow(.)), value / population, value))
+                names_to = "case",
+                values_to = "value") %>%
+            mutate(value = ifelse(rep(input$by_population, nrow(.)), value / population, value)) %>%
+            filter(date >= input$date_range[1], date <= input$date_range[2])    
     })
     
 
