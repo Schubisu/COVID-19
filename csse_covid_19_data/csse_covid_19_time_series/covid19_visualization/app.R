@@ -32,9 +32,9 @@ ui <- fluidPage(
             checkboxGroupInput("cases",
                                "Cases",
                                choices = list("Confirmed" = "confirmed",
-                                              "Deaths" = "deaths"),
-                                              # "Recovered" = "recovered",
-                                              # "Fatality" = "fatality"),
+                                              "Deaths" = "deaths",
+                                              "Recovered" = "recovered",
+                                              "Fatality" = "fatality"),
                                selected = "confirmed")
         ),
 
