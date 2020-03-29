@@ -40,3 +40,17 @@ long_data <- confirmed %>%
   left_join(population) %>%
   mutate(fatality = deaths / (confirmed + recovered))
   
+
+plot_bars <- function() {
+  long_data %>% 
+    group_by(Country.Region) %>% 
+    arrange(desc(date)) %>% 
+    slice(1) %>% 
+    ungroup() %>% 
+    arrange(desc(deaths)) %>% 
+    slice(1:20) %>% 
+    ggplot(aes(x = Country.Region, weight = deaths, fill=fatality)) + 
+    geom_bar() + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+    scale_fill_gradientn(colours = rainbow(5))
+}
